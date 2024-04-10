@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Sanal Ajanda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Font-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sourcesanspro-font.css' %}">
+    <!-- Main Style Css -->
+    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+
+</head>
+<body>
+{% include 'includes/navbar.html' %}
+
+<div class="home-content">
+
+    <div class="row">
+        <div class="not-ekle col-xl-3 col-lg-3 col-md-3 ">
+            <center>
+                <h1>Not Ekle</h1>
+                <form id="not-ekle-form" method="post">
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-success btn-lg">Not Ekle</button>
+
+                </form>
+            </center>
+        </div>
+
+        <div class="not-goster col-xl-8 col-lg-7 col-md-7 ">
+            <center><h1>Notlar</h1>
+                <form id="tarih-form" method="get">
+
+                    <label for="secilen_tarih">Tarih Seç:</label>
+                    <input style="width: 120px" type="date" id="secilen_tarih" name="secilen_tarih">
+                    <button type="submit" style="display: none;">Tarihe Göre Notları Göster</button>
+                </form>
+            </center>
+            <br>
+            <div id="secilen_tarih">
+                <div class="card" style="width: 100%;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if secilen_tarih %}
+                                Seçilen Tarih: {{ secilen_tarih }}
+                            {% endif %}
+                        </h5>
+                    </div>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">
+                        {% if tasks %}
+
+                            <ul>
+                                {% for task in tasks %}
+                                    <li><h5>{{ task.not_metni }}</h5>
+                                        <form method="post" action="{% url 'not_sil' task.id %}">{% csrf_token %}
+                                            <button class="btn btn-danger" style="--bs-btn-font-size: .7rem;"
+                                                    type="submit">Sil
+                                            </button>
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <center><h5>Seçili tarihe ait not bulunamadı.</h5></center>
+                        {% endif %}
+                    </h6>
+
+                </div>
+            </div>
+
+            <br>
+
+            <form method="post" action="{% url 'notlari_gonder' %}">
+                {% csrf_token %}
+                <center><input name="secilen_tarih" value="{{ secilen_tarih }}" maxlength="10" size="7"><br>
+                    {% if secilen_tarih is not None %}
+                        <button type="submit" class="btn btn-warning">Seçili Tarihteki Notları Mail ile Gönder
+                        </button>
+
+                    {% endif %}
+                </center>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript fonksiyonunu oluştur
+    function tarihDegisti() {
+        document.getElementById('tarih-form').submit(); // Formu otomatik olarak gönder
+    }
+</script>
+
+<!-- Tarih alanını değişiklikleri algılamak için onchange özelliğini ekle -->
+<script>
+    document.getElementById('secilen_tarih').addEventListener('change', tarihDegisti);
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dateInput = document.getElementById("tarih-form");
+
+        dateInput.addEventListener("change", function () {
+            const secilen_tarih = dateInput.value;
+            const tarihDiv = document.getElementById("secilen_tarih");
+            tarihDiv.innerText = `Seçilen Tarih: ${secilen_tarih}`;
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
