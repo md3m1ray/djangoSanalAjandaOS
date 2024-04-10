@@ -12,7 +12,6 @@ from .models import Tasks
 from .forms import MyForm
 from django.conf import settings
 from mailersend import emails
-from django.contrib.auth.views import LoginView
 from django.contrib import messages
 
 
