@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'SanalAjanda.apps.SanalajandaConfig',
-    "anymail"
 ]
 
 MIDDLEWARE = [
@@ -137,7 +136,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'ajandanotdefteri@gmail.com'
-API_KEY = env('API_KEY')
 
 
 AUTH_USER_MODEL = 'SanalAjanda.CustomUser'

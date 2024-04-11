@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Tasks
 from .forms import MyForm
 from django.conf import settings
-from mailersend import emails
 from django.contrib import messages
 
 
@@ -121,4 +120,3 @@ def notlari_mail_ile_gonder(request):
             return redirect('ana_sayfa')
 
     return HttpResponse("Seçili bir tarih yok.")
-
