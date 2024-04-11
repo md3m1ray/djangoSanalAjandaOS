@@ -83,7 +83,7 @@
                 {% csrf_token %}
                 <center><input name="secilen_tarih" value="{{ secilen_tarih }}" maxlength="10" size="7"><br>
                     {% if secilen_tarih is not None %}
-                        <button type="submit" style="display: none;" class="btn btn-warning">Seçili Tarihteki Notları Mail ile Gönder
+                        <button type="submit" class="btn btn-warning">Seçili Tarihteki Notları Mail ile Gönder
                         </button>
 
                     {% endif %}

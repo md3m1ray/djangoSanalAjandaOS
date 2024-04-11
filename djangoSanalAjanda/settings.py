@@ -136,7 +136,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'MS_HQZA1g@trial-v69oxl5y7pd4785k.mlsender.net'
+DEFAULT_FROM_EMAIL = 'ajandanotdefteri@gmail.com'
 API_KEY = env('API_KEY')
 
 

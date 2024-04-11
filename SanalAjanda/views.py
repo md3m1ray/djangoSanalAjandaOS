@@ -111,7 +111,7 @@ def notlari_mail_ile_gonder(request):
     if request.method == 'POST':
         secilen_tarih = request.POST.get('secilen_tarih')
         if secilen_tarih:
-            tasks = Tasks.objects.filter(tarih=secilen_tarih)
+            tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
             notlar = "\n".join([task.not_metni for task in tasks])
             user_email = request.user.email  # Kullanıcının kayıt olduğu mail adresi
             subject = f"{secilen_tarih} Notları"
@@ -122,51 +122,3 @@ def notlari_mail_ile_gonder(request):
 
     return HttpResponse("Seçili bir tarih yok.")
 
-# @login_required
-# def notlari_mail_ile_gonder(request):
-#     if request.method == 'POST':
-#         secilen_tarih = request.POST.get('secilen_tarih')
-#         if secilen_tarih:
-#
-#             mailer = emails.NewEmail(settings.API_KEY)
-#             mail_body = {}
-#
-#             tasks = Tasks.objects.filter(tarih=secilen_tarih)
-#             notlar = "\n".join([task.not_metni for task in tasks])
-#             user_email = request.user.email  # Kullanıcının kayıt olduğu mail adresi
-#             subject = f"{secilen_tarih} Notları"
-#             message = f"Seçili Tarih: {secilen_tarih}\nNotlar:\n{notlar}"
-#
-#             mail_from = {
-#                 "name": "Ajanda Not Defteri",
-#                 "email": settings.DEFAULT_FROM_EMAIL,
-#             }
-#
-#             recipients = [
-#                 {
-#                     "name": "Sayın Kullanıcımız",
-#                     "email": user_email,
-#                 }
-#             ]
-#
-#             reply_to = [
-#                 {
-#                     "name": "Ajanda Not Defteri",
-#                     "email": settings.DEFAULT_FROM_EMAIL,
-#                 }
-#             ]
-#
-#             mailer.set_mail_from(mail_from, mail_body)
-#             mailer.set_mail_to(recipients, mail_body)
-#             mailer.set_subject(subject, mail_body)
-#             mailer.set_html_content(message, mail_body)
-#             mailer.set_plaintext_content(f"{message}", mail_body)
-#             mailer.set_reply_to(reply_to, mail_body)
-#
-#             # using print() will also return status code and data
-#             mailer.send(mail_body)
-#             print(settings.API_KEY)
-#             print(mail_body)
-#             return redirect('ana_sayfa')
-#
-#     return HttpResponse("Seçili bir tarih yok.")
