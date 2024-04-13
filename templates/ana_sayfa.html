@@ -13,7 +13,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/sourcesanspro-font.css' %}">
     <!-- Main Style Css -->
     <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <style>
+        /* CSS kodları */
 
+        input[type="text"] {
+
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+
+    </style>
 </head>
 <body>
 {% include 'includes/navbar.html' %}
@@ -21,21 +33,23 @@
 <div class="home-content">
 
     <div class="row">
-        <div class="not-ekle col-xl-3 col-lg-3 col-md-3 ">
+        <div class="not-ekle col-xl-4 col-lg-4 col-md-4 ">
             <center>
                 <h1>Not Ekle</h1>
-                <form id="not-ekle-form" method="post">
+                <form id="not-ekle-form" name="form1" method="post">
                     {% csrf_token %}
+                    <label for="tarih">Tarih Seç:</label>
+                    {{ form1.tarih }}
+                    <br><br>
+                    {{ form1.not_metni }}
 
-                    {{ form.as_p }}
-
-                    <button type="submit" class="btn btn-success btn-lg">Not Ekle</button>
+                    <button type="submit" name="form1-submit" class="btn btn-success btn-lg">Not Ekle</button>
 
                 </form>
             </center>
         </div>
 
-        <div class="not-goster col-xl-8 col-lg-7 col-md-7 ">
+        <div class="not-goster col-xl-7 col-lg-6 col-md-6 ">
             <center><h1>Notlar</h1>
                 <form id="tarih-form" method="get">
 
@@ -78,17 +92,25 @@
             </div>
 
             <br>
-
+<center>
             <form method="post" action="{% url 'notlari_gonder' %}">
                 {% csrf_token %}
-                <center><input name="secilen_tarih" value="{{ secilen_tarih }}" maxlength="10" size="7"><br>
+                
+                    <input name="secilen_tarih" value="{{ secilen_tarih }}" maxlength="10" size="7"><br>
                     {% if secilen_tarih is not None %}
                         <button type="submit" class="btn btn-warning">Seçili Tarihteki Notları Mail ile Gönder
                         </button>
 
                     {% endif %}
-                </center>
+
             </form>
+    <br>
+            <center><h6>*Yarının Notları Her Gün Saat 21 de Otomatik Olarak Eposta Adresinize Gönderilir.</h6></center>
+            <form name="form2" method="post">
+                {% csrf_token %}
+                {{ form2.as_p }}
+                <button type="submit" class="btn btn-primary btn-sm" name="form2-submit">Bildirim Tercihini Kaydet</button>
+            </form></center>
         </div>
     </div>
 </div>

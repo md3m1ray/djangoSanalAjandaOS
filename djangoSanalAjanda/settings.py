@@ -137,5 +137,4 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'ajandanotdefteri@gmail.com'
 
-
 AUTH_USER_MODEL = 'SanalAjanda.CustomUser'

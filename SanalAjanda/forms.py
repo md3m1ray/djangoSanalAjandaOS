@@ -1,4 +1,5 @@
 from django import forms
+from .models import CustomUser
 
 
 class MyForm(forms.Form):
@@ -6,3 +7,30 @@ class MyForm(forms.Form):
                             widget=forms.DateInput(attrs={'type': 'date', 'style': 'width: 120px;'}))
     not_metni = forms.CharField(max_length=250,
                                 widget=forms.TextInput(attrs={'type': 'text', 'style': 'width: 100%;'}))
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['email']
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['email'].required = False
+
+
+class NotificationPreferenceForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['automatic_notifications']
+        labels = {'automatic_notifications': 'Otomatik Bildirim Tercihi'}
+
+    def __init__(self, user=None, *args, **kwargs):
+        super(NotificationPreferenceForm, self).__init__(*args, **kwargs)
+
+        if user:
+            mevcut_bildirim = user.automatic_notifications
+            if mevcut_bildirim:
+                self.fields['automatic_notifications'].initial = mevcut_bildirim
+
+

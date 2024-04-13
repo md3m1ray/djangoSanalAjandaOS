@@ -9,13 +9,12 @@ from django.utils.encoding import force_bytes
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Tasks
-from .forms import MyForm
+from .forms import MyForm, UserProfileForm, NotificationPreferenceForm
 from django.conf import settings
 from django.contrib import messages
 
 
 def not_sil(request, not_id):
-
     if request.method == 'POST':
         not_obj = Tasks.objects.get(pk=not_id)
         not_obj.delete()
@@ -85,24 +84,37 @@ def password_reset_request(request):
 
 @login_required
 def ana_sayfa(request):
+    global form1, form2
+
     if request.method == 'POST':
-        form = MyForm(request.POST)
+        if 'form1-submit' in request.POST:
+            form1 = MyForm(request.POST)
+            form2 = NotificationPreferenceForm(request.POST, instance=request.user)
+            if form1.is_valid():
+                tarih = form1.cleaned_data['tarih']
+                not_metni = form1.cleaned_data['not_metni']
+                Tasks.objects.create(user=request.user, tarih=tarih, not_metni=not_metni)
+                secilen_tarih = request.GET.get('secilen_tarih')
+                tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
+                return render(request, 'ana_sayfa.html',
+                              {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
 
-        if form.is_valid():
-            tarih = form.cleaned_data['tarih']
-            not_metni = form.cleaned_data['not_metni']
-            Tasks.objects.create(user=request.user, tarih=tarih, not_metni=not_metni)
-
-            return redirect('ana_sayfa')
+        elif 'form2-submit' in request.POST:
+            form2 = NotificationPreferenceForm(request.POST, instance=request.user)
+            if form2.is_valid():
+                form2.save()
+                return redirect('ana_sayfa')
 
     else:
-        form = MyForm()
+
+        form1 = MyForm(request.POST)
+        form2 = NotificationPreferenceForm(request.POST, instance=request.user)
 
     secilen_tarih = request.GET.get('secilen_tarih')
     tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
 
     return render(request, 'ana_sayfa.html',
-                  {'form': form, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
+                  {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
 
 
 @login_required
@@ -120,3 +132,15 @@ def notlari_mail_ile_gonder(request):
             return redirect('ana_sayfa')
 
     return HttpResponse("Seçili bir tarih yok.")
+
+
+@login_required
+def ayarlar(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('ayarlar')
+    else:
+        form = UserProfileForm(instance=request.user)
+    return render(request, 'ayarlar.html', {'form': form})

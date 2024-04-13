@@ -13,7 +13,30 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/sourcesanspro-font.css' %}">
     <!-- Main Style Css -->
     <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <style>
+        /* CSS kodları */
+       
+        input[type="email"] {
+            width: 250px;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+        
+        
+        input[type="text"] {
+            width: 80px;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            box-sizing: border-box;
 
+        }
+        
+    </style>
 </head>
 <body>
 {% include 'includes/navbar.html' %}
@@ -22,15 +45,17 @@
     <div class="row">
         <div class="setting-content col-xl-11 col-lg-11 col-md-10">
 
-            <h1>Ayarlar</h1>
+            <h1>E-posta Değiştir</h1>
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-                    
- 
-                <button type="submit" class="btn btn-primary btn-lg">Şifre Değiştir</button>
+                <label for="email">E-posta Adresi:</label>
+                {{ form.email }}
+                <br>
+                <button type="submit" class="btn btn-primary btn-lg">E-posta Değiştir</button>
             </form>
-
+            <br>
+            <br>
+            <a type="button" href="{% url "password_change" %}" class="btn btn-warning btn-lg">Şifre Değiştir</a>
         </div>
     </div>
 </div>

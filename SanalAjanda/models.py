@@ -23,7 +23,8 @@ class CustomUser(AbstractBaseUser):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-
+    note_delivery_time = models.TimeField(default='21:00')
+    automatic_notifications = models.BooleanField(default=True)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
