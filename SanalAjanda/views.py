@@ -104,7 +104,7 @@ def ana_sayfa(request):
                 secilen_tarih = request.GET.get('secilen_tarih')
                 tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
                 return render(request, 'ana_sayfa.html',
-                              {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
+                              {'form1': form1,  'tasks': tasks, 'secilen_tarih': secilen_tarih})
 
         # elif 'form2-submit' in request.POST:
         #     form2 = NotificationPreferenceForm(request.POST, instance=request.user)
@@ -121,7 +121,7 @@ def ana_sayfa(request):
     tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
 
     return render(request, 'ana_sayfa.html',
-                  {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
+                  {'form1': form1,  'tasks': tasks, 'secilen_tarih': secilen_tarih})
 
 
 @login_required
