@@ -34,9 +34,15 @@ def kayit(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         # Yeni kullanıcı oluştur
-        user = CustomUser.objects.create_user(email=email, password=password)
-        # Oturumu aç
-        login(request, user)
+        user, created = CustomUser.objects.get_or_create(email=email)
+
+        # Kullanıcı zaten varsa
+        if not created:
+            return render(request, 'kayit.html', {'error_message': 'Bu e-posta adresi zaten kayıtlı.'})
+
+        # Parolayı ayarla ve kullanıcıyı oturum açtır
+        user.set_password(password)
+        user.save()
         return redirect('giris')
     return render(request, 'kayit.html')
 
