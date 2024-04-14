@@ -19,18 +19,18 @@ class UserProfileForm(forms.ModelForm):
         self.fields['email'].required = False
 
 
-class NotificationPreferenceForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ['automatic_notifications']
-        labels = {'automatic_notifications': 'Otomatik Bildirim Tercihi'}
-
-    def __init__(self, user=None, *args, **kwargs):
-        super(NotificationPreferenceForm, self).__init__(*args, **kwargs)
-
-        if user:
-            mevcut_bildirim = user.automatic_notifications
-            if mevcut_bildirim:
-                self.fields['automatic_notifications'].initial = mevcut_bildirim
+# class NotificationPreferenceForm(forms.ModelForm):
+#     class Meta:
+#         model = CustomUser
+#         fields = ['automatic_notifications']
+#         labels = {'automatic_notifications': 'Otomatik Bildirim Tercihi'}
+#
+#     def __init__(self, user=None, *args, **kwargs):
+#         super(NotificationPreferenceForm, self).__init__(*args, **kwargs)
+#
+#         if user:
+#             mevcut_bildirim = user.automatic_notifications
+#             if mevcut_bildirim:
+#                 self.fields['automatic_notifications'].initial = mevcut_bildirim
 
 
