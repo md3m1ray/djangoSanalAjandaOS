@@ -12,7 +12,7 @@ from .models import Tasks
 from .forms import MyForm, UserProfileForm
 from django.conf import settings
 from django.contrib import messages
-# from .forms import NotificationPreferenceForm
+from .forms import NotificationPreferenceForm
 
 
 def not_sil(request, not_id):
@@ -96,7 +96,7 @@ def ana_sayfa(request):
     if request.method == 'POST':
         if 'form1-submit' in request.POST:
             form1 = MyForm(request.POST)
-            # form2 = NotificationPreferenceForm(request.POST, instance=request.user)
+            form2 = NotificationPreferenceForm(instance=request.user)
             if form1.is_valid():
                 tarih = form1.cleaned_data['tarih']
                 not_metni = form1.cleaned_data['not_metni']
@@ -104,24 +104,24 @@ def ana_sayfa(request):
                 secilen_tarih = request.GET.get('secilen_tarih')
                 tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
                 return render(request, 'ana_sayfa.html',
-                              {'form1': form1,  'tasks': tasks, 'secilen_tarih': secilen_tarih})
+                              {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
 
-        # elif 'form2-submit' in request.POST:
-        #     form2 = NotificationPreferenceForm(request.POST, instance=request.user)
-        #     if form2.is_valid():
-        #         form2.save()
-        #         return redirect('ana_sayfa')
+        elif 'form2-submit' in request.POST:
+            form2 = NotificationPreferenceForm(request.POST, instance=request.user)
+            if form2.is_valid():
+                form2.save()
+                return redirect('ana_sayfa')
 
     else:
 
         form1 = MyForm(request.POST)
-        # form2 = NotificationPreferenceForm(request.POST, instance=request.user)
+        form2 = NotificationPreferenceForm(instance=request.user)
 
     secilen_tarih = request.GET.get('secilen_tarih')
     tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
 
     return render(request, 'ana_sayfa.html',
-                  {'form1': form1,  'tasks': tasks, 'secilen_tarih': secilen_tarih})
+                  {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
 
 
 @login_required
