@@ -13,15 +13,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/sourcesanspro-font.css' %}">
     <!-- Main Style Css -->
     <link rel="stylesheet" href="{% static "css/style.css" %}"/>
-    
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
-
-    
     <link rel="stylesheet" href="{% static "fonts/icomoon/style.css" %}">
-
     <link rel="stylesheet" href="{% static "css/rome.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
     <style>
         /* CSS kodları */
 
@@ -32,44 +29,50 @@
             border: 1px solid #ccc;
             border-radius: 15px;
             box-sizing: border-box;
+            width: 100%;
         }
 
+        #selected_date_input {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            box-sizing: border-box;
+            width: 100px;
+        }
     </style>
+
 </head>
 <body>
 {% include 'includes/navbar.html' %}
 
 <div class="home-content">
 
-<div class="content">
-    
-    <div class="container text-left">
-      <div class="row justify-content-center">
-        <div class="col-md-10 text-center">
-          <h2 class="mb-5 text-center">Calendar #6 (Inline)</h2>
-          <form action="#" class="row">
-            <div class="col-md-12">
-              <div id="inline_cal"></div>
-            </div>
-          </form>
-        </div>
-      </div>
-          
-    </div>
-  </div>
-
-
     <div class="row">
         <div class="not-ekle col-xl-4 col-lg-4 col-md-4 ">
             <center>
-                <h1>Not Ekle</h1>
+                <div class="content">
+                    <div class="container text-left">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 text-center">
+                                <form id="dateForm" method="post" action="#" class="row">
+
+                                    <div class="col-md-12">
+                                        <div id="inline_cal"></div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
                 <form id="not-ekle-form" name="form1" method="post">
                     {% csrf_token %}
-                    <label for="tarih">Tarih Seç:</label>
-                    {{ form1.tarih }}
-                    <br><br>
-                    {{ form1.not_metni }}
 
+                    <input type="text" name="selected_date_input" id="selected_date_input">
+                    <input type="text" name="not_metni" id="not_metni">
+                    <br>
                     <button type="submit" name="form1-submit" class="btn btn-success btn-lg">Not Ekle</button>
 
                 </form>
@@ -79,13 +82,10 @@
         <div class="not-goster col-xl-7 col-lg-6 col-md-6 ">
             <center><h1>Notlar</h1>
                 <form id="tarih-form" method="get">
-
-                    <label for="secilen_tarih">Tarih Seç:</label>
-                    <input style="width: 120px" type="date" id="secilen_tarih" name="secilen_tarih">
+                    <input style="width: 120px; display: none;" type="date" id="secilen_tarih" name="secilen_tarih">
                     <button type="submit" style="display: none;">Tarihe Göre Notları Göster</button>
                 </form>
             </center>
-            <br>
             <div id="secilen_tarih">
                 <div class="card" style="width: 100%;">
 
@@ -118,29 +118,62 @@
                 </div>
             </div>
 
-            <br>
-<center>
-            <form method="post" action="{% url 'notlari_gonder' %}">
-                {% csrf_token %}
-                
-                    <input name="secilen_tarih" value="{{ secilen_tarih }}" maxlength="10" size="7"><br>
+            
+            <center>
+                <form method="post" action="{% url 'notlari_gonder' %}">
+                    {% csrf_token %}
+
+                    <input name="secilen_tarih" style="display: none" value="{{ secilen_tarih }}" maxlength="10" size="7"><br>
                     {% if secilen_tarih is not None %}
                         <button type="submit" class="btn btn-warning">Seçili Tarihteki Notları Mail ile Gönder
                         </button>
 
                     {% endif %}
 
-            </form>
-    <br>
-            <center><h6>*Yarının Notları Her Gün Saat 21 de Otomatik Olarak Eposta Adresinize Gönderilir.</h6></center>
-            <form name="form2" method="post">
-                {% csrf_token %}
-                {{ form2.as_p }}
-                <button type="submit" class="btn btn-primary btn-sm" name="form2-submit">Bildirim Tercihini Kaydet</button>
-            </form></center>
+                </form>
+                <br>
+                <center><h6>*Yarının Notları Her Gün Saat 21 de Otomatik Olarak Eposta Adresinize Gönderilir.</h6>
+                </center>
+                <form name="form2" method="post">
+                    {% csrf_token %}
+                    {{ form2.as_p }}
+                    <button type="submit" class="btn btn-primary btn-sm" name="form2-submit">Bildirim Tercihini Kaydet
+                    </button>
+                </form>
+            </center>
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var inlineCal = rome(document.getElementById('inline_cal'), {
+            time: false,
+            weekStart : 1,
+            
+        });
+
+        inlineCal.on('data', function (value) {
+            $('#secilen_tarih').val(value);
+            $('#selected_date_input').val(value);
+            
+            // Seçilen tarihi localStorage'a kaydet
+            localStorage.setItem('previousDate', value);
+            $('#tarih-form').submit();
+        });
+
+        // Sayfa yüklendiğinde localStorage'dan önceki tarih değerini al
+        var previousDate = localStorage.getItem('previousDate');
+        if (previousDate) {
+            $('#selected_date_input').val(previousDate);
+            selectedMonth = moment(previousDate).format('MM');
+            inlineCal.set(moment(previousDate)); // Tarih seçicisine önceki tarih değerini ayarla
+        }
+         
+    });
+</script>
+
 
 <script>
     // JavaScript fonksiyonunu oluştur
@@ -168,10 +201,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+
 <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
-    <script src="{% static "js/popper.min.js" %}"></script>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
-    <script src="{% static "js/rome.js" %}"></script>
+<script src="{% static "js/popper.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/rome.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
 
 </body>
 </html>

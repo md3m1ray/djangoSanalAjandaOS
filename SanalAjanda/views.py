@@ -9,7 +9,7 @@ from django.utils.encoding import force_bytes
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Tasks
-from .forms import MyForm, UserProfileForm
+from .forms import UserProfileForm
 from django.conf import settings
 from django.contrib import messages
 from .forms import NotificationPreferenceForm
@@ -91,20 +91,23 @@ def password_reset_request(request):
 
 @login_required
 def ana_sayfa(request):
-    global form1, form2
+    global form2
+    not_metni = request.POST.get('not_metni')
+    selected_date_input = request.POST.get('selected_date_input')
 
     if request.method == 'POST':
         if 'form1-submit' in request.POST:
-            form1 = MyForm(request.POST)
+
             form2 = NotificationPreferenceForm(instance=request.user)
-            if form1.is_valid():
-                tarih = form1.cleaned_data['tarih']
-                not_metni = form1.cleaned_data['not_metni']
-                Tasks.objects.create(user=request.user, tarih=tarih, not_metni=not_metni)
-                secilen_tarih = request.GET.get('secilen_tarih')
-                tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
-                return render(request, 'ana_sayfa.html',
-                              {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
+
+            if selected_date_input and not_metni:
+                Tasks.objects.create(user=request.user, tarih=selected_date_input, not_metni=not_metni)
+            secilen_tarih = request.GET.get('secilen_tarih')
+            tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
+            return render(request, 'ana_sayfa.html',
+                          {'form2': form2, 'tasks': tasks,
+                           'secilen_tarih': secilen_tarih, "not_metni": not_metni,
+                           "selected_date_input": selected_date_input})
 
         elif 'form2-submit' in request.POST:
             form2 = NotificationPreferenceForm(request.POST, instance=request.user)
@@ -114,14 +117,14 @@ def ana_sayfa(request):
 
     else:
 
-        form1 = MyForm(request.POST)
         form2 = NotificationPreferenceForm(instance=request.user)
 
     secilen_tarih = request.GET.get('secilen_tarih')
     tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
 
     return render(request, 'ana_sayfa.html',
-                  {'form1': form1, 'form2': form2, 'tasks': tasks, 'secilen_tarih': secilen_tarih})
+                  {'form2': form2, 'tasks': tasks,
+                   'secilen_tarih': secilen_tarih, "not_metni": not_metni, "selected_date_input": selected_date_input})
 
 
 @login_required

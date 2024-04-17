@@ -16,7 +16,7 @@ def send_tomorrows_notes():
     subject = f"Yarının Notları - {tomorrow.strftime('%d/%m/%Y')}"
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT email FROM 'SanalAjanda_customuser' WHERE automatic_notifications = TRUE")
+        cursor.execute("SELECT email FROM SanalAjanda_customuser WHERE automatic_notifications = TRUE")
         rows = cursor.fetchall()
         for row in rows:
             user_email = row[0]
@@ -25,7 +25,7 @@ def send_tomorrows_notes():
             notlar = "\n".join([note.not_metni for note in tomorrow_notes])
 
             if tomorrow_notes:
-                message = (f"Seçili Tarih: {tomorrow}\nNotlar:\n{notlar}\n\nBu eposta otomatik olarak gönderilmiştir.\n"
+                message = (f"Seçili Tarih: {tomorrow.strftime('%d/%m/%Y')}\nNotlar:\n{notlar}\n\nBu eposta otomatik olarak gönderilmiştir.\n"
                            f"Eposta almak istemiyorsanız bildirim seçeneğini kapatabilirsiniz.\n"
                            f"Saygılarımızla.\nsanalajanda.com")
             else:
