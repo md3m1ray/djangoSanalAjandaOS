@@ -102,7 +102,7 @@ def ana_sayfa(request):
             form2 = NotificationPreferenceForm(instance=request.user)
 
             if selected_date_input and not_metni:
-                Tasks.objects.create(user=request.user, tarih=selected_date_input, not_metni=not_metni)
+                Tasks.objects.create(user=request.user, tarih=selected_date_input, not_metni=not_metni.lower())
             secilen_tarih = request.GET.get('secilen_tarih')
             tasks = Tasks.objects.filter(user=request.user, tarih=secilen_tarih)
             return render(request, 'ana_sayfa.html',
@@ -130,10 +130,10 @@ def ana_sayfa(request):
 
 @login_required
 def arama(request):
-    query = request.GET.get('q').lower()
+    query = request.GET.get('q')()
     if query:
         # Tarih ve not metni içinde arama yap
-        tasks = Tasks.objects.filter(Q(tarih__icontains=query) | Q(not_metni__icontains=query.lower()),
+        tasks = Tasks.objects.filter(Q(tarih__icontains=query) | Q(not_metni__icontains=query),
                                      user=request.user).order_by('tarih')
     else:
         tasks = None
