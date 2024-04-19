@@ -20,7 +20,6 @@
 
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
     <style>
-        /* CSS kodları */
 
         input[type="text"] {
 
@@ -118,13 +117,14 @@
                 </div>
             </div>
 
-            
             <center>
                 <form method="post" action="{% url 'notlari_gonder' %}">
                     {% csrf_token %}
 
-                    <input name="secilen_tarih" style="display: none" value="{{ secilen_tarih }}" maxlength="10" size="7"><br>
-                    {% if secilen_tarih is not None %}
+                    <input name="secilen_tarih" style="display: none" value="{{ secilen_tarih }}" maxlength="10"
+                           size="7"><br>
+                    {% if tasks %}
+
                         <button type="submit" class="btn btn-warning">Seçili Tarihteki Notları Mail ile Gönder
                         </button>
 
@@ -146,37 +146,45 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/tr.min.js"></script>
+
 <script>
     $(document).ready(function () {
         var inlineCal = rome(document.getElementById('inline_cal'), {
             time: false,
-            weekStart : 1,
-            
-        });
+            weekStart: 1,
+            weekdayFormat: "short",
 
+        })
+        
         inlineCal.on('data', function (value) {
             $('#secilen_tarih').val(value);
             $('#selected_date_input').val(value);
             
-            // Seçilen tarihi localStorage'a kaydet
+            // Seçilen tarihi kaydet
             localStorage.setItem('previousDate', value);
-            $('#tarih-form').submit();
+            
+            // sadece günlere tıklandığında submit işlemi yap
+            if (!$(event.target).hasClass('rd-back') && !$(event.target).hasClass('rd-next')) {
+                $('#tarih-form').submit();
+            }
+            
         });
 
-        // Sayfa yüklendiğinde localStorage'dan önceki tarih değerini al
+        // Sayfa yüklendiğinde önceki tarih değerini al
         var previousDate = localStorage.getItem('previousDate');
         if (previousDate) {
             $('#selected_date_input').val(previousDate);
-            selectedMonth = moment(previousDate).format('MM');
-            inlineCal.set(moment(previousDate)); // Tarih seçicisine önceki tarih değerini ayarla
+
         }
-         
+        
+
     });
 </script>
 
 
 <script>
-    // JavaScript fonksiyonunu oluştur
     function tarihDegisti() {
         document.getElementById('tarih-form').submit(); // Formu otomatik olarak gönder
     }
@@ -198,6 +206,7 @@
         });
     });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
