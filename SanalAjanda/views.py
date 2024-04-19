@@ -128,7 +128,6 @@ def ana_sayfa(request):
                    'secilen_tarih': secilen_tarih, "not_metni": not_metni, "selected_date_input": selected_date_input})
 
 
-
 @login_required
 def arama(request):
     query = request.GET.get('q')
