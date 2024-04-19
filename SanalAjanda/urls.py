@@ -22,4 +22,5 @@ urlpatterns = [
          auth_views.PasswordChangeDoneView.as_view(template_name='registration/sifre_degistir_basarili.html'),
          name='password_change_done'),
     path('not-sil/<int:not_id>/', views.not_sil, name='not_sil'),
+
 ]
