@@ -16,7 +16,7 @@ def send_tomorrows_notes():
     subject = f"Yarının Notları - {tomorrow.strftime('%d/%m/%Y')}"
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT email FROM SanalAjanda_customuser WHERE automatic_notifications = TRUE")
+        cursor.execute('SELECT email FROM "SanalAjanda_customuser" WHERE automatic_notifications = TRUE')
         rows = cursor.fetchall()
         for row in rows:
             user_email = row[0]
