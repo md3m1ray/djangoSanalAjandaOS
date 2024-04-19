@@ -183,6 +183,14 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function() {
+            this.value = this.value.toLowerCase();
+        });
+    });
+</script>
 
 <script>
     function tarihDegisti() {
