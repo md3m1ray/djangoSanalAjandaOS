@@ -130,10 +130,10 @@ def ana_sayfa(request):
 
 @login_required
 def arama(request):
-    query = request.GET.get('q')
+    query = request.GET.get('q').lower()
     if query:
         # Tarih ve not metni içinde arama yap
-        tasks = Tasks.objects.filter(Q(tarih__icontains=query) | Q(not_metni__icontains=query),
+        tasks = Tasks.objects.filter(Q(tarih__icontains=query) | Q(not_metni__icontains=query.lower()),
                                      user=request.user).order_by('tarih')
     else:
         tasks = None
