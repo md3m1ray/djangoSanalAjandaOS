@@ -18,8 +18,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'cikis' %}">Cıkış</a>
                 </li>
-
+                
             </ul>
+            <form class="d-flex" method="GET" action="{% url 'arama' %}">
+                <input class="form-control me-2" type="search" placeholder="Not Ara" aria-label="Search"
+                       name="q">
+                <button class="btn btn-outline-success" type="submit">Ara</button>
+            </form>
 
         </div>
     </div>

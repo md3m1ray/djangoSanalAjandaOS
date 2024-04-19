@@ -13,6 +13,7 @@ from .forms import UserProfileForm
 from django.conf import settings
 from django.contrib import messages
 from .forms import NotificationPreferenceForm
+from django.db.models import Q
 
 
 def not_sil(request, not_id):
@@ -125,6 +126,18 @@ def ana_sayfa(request):
     return render(request, 'ana_sayfa.html',
                   {'form2': form2, 'tasks': tasks,
                    'secilen_tarih': secilen_tarih, "not_metni": not_metni, "selected_date_input": selected_date_input})
+
+
+@login_required
+def arama(request):
+    query = request.GET.get('q')
+    if query:
+        # Tarih ve not metni içinde arama yap
+        tasks = Tasks.objects.filter(Q(tarih__icontains=query) | Q(not_metni__icontains=query),
+                                     user=request.user).order_by('tarih')
+    else:
+        tasks = None
+    return render(request, 'arama_sonucu.html', {'query': query, 'tasks': tasks})
 
 
 @login_required

@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="{% static "css/rome.css" %}">
 
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
     <style>
 
         input[type="text"] {
@@ -66,7 +68,7 @@
                     </div>
                 </div>
                 <br>
-                <form id="not-ekle-form" name="form1" method="post">
+                <form id="not-ekle-form" name="form1" method="post" accept-charset="UTF-8">
                     {% csrf_token %}
 
                     <input type="text" name="selected_date_input" id="selected_date_input">

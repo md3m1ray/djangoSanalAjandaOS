@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.giris, name='giris'),
     path('ana_sayfa', views.ana_sayfa, name='ana_sayfa'),
     path('ayarlar/', views.ayarlar, name='ayarlar'),
+    path('arama', views.arama, name='arama'),
     path('sifremi-sifirla/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('sifremi-sifirla/yeniden-gonderildi/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('sifremi-sifirla/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(),
