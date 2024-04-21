@@ -73,7 +73,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/sw.js?v=3');
+                navigator.serviceWorker.register('/sw.js?v=4');
             });
         }
     </script>
@@ -261,7 +261,8 @@
         crossorigin="anonymous"></script>
 
 <script>
-    const installButton = document.getElementById('install-app');
+    const installButton = document.getElementById('install-app'),
+        installContainer = document.querySelector('.install-app-container');
     let beforeInstallPromptEvent
     window.addEventListener("beforeinstallprompt", function(e) {
         e.preventDefault();
