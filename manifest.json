@@ -35,7 +35,7 @@
     ],
     "theme_color": "#ffffff",
     "background_color": "#1f1f1f",
-    "start_url": "/",
+    "start_url": "/ana_sayfa",
     "display": "standalone",
     "orientation": "portrait"
   }
