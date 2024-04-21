@@ -73,7 +73,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/static/sw.js?v=7');
+                navigator.serviceWorker.register('/static/sw.js?v=6');
             });
         }
     </script>
@@ -83,11 +83,12 @@
 {% include 'includes/navbar.html' %}
 
 <div class="home-content">
-    <center><div class="install-app-container">
-        Uygulamamızı Yükleyebilirsiniz
-        <button id="install-app" class="btn btn-success btn-sm" style="display: none">Uygulamayı Yükle</button>
-    </div></center>
-
+    <center>
+        <div class="install-app-container">
+            <button id="install-app" class="btn btn-success btn-sm" style="display: none">Uygulamayı Yükle</button>
+        </div>
+    </center>
+    <br>
     <div class="row">
         <div class="not-ekle col-xl-4 col-lg-4 col-md-4 ">
             <center>
@@ -264,16 +265,16 @@
     const installButton = document.getElementById('install-app'),
         installContainer = document.querySelector('.install-app-container');
     let beforeInstallPromptEvent
-    window.addEventListener("beforeinstallprompt", function(e) {
+    window.addEventListener("beforeinstallprompt", function (e) {
         e.preventDefault();
         beforeInstallPromptEvent = e
         installButton.style.display = 'block'
-        installButton.addEventListener("click", function() {
+        installButton.addEventListener("click", function () {
             e.prompt();
         });
         installButton.hidden = false;
     });
-    installButton.addEventListener("click", function() {
+    installButton.addEventListener("click", function () {
         beforeInstallPromptEvent.prompt();
     });
 </script>
