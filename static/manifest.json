@@ -1,6 +1,6 @@
 {
     "name": "sanalajanda.com",
-    "short_name": "sanalajanda",
+    "short_name": "Sanal Ajanda",
     "icons": [
       {
         "src": "/pwa/img/36x36.png",
@@ -33,9 +33,9 @@
         "type": "image/png"
       }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#1f1f1f",
-    "start_url": "/ana_sayfa",
+    "theme_color": "#3d5983",
+    "background_color": "#3d5983",
+    "start_url": "/",
     "display": "standalone",
     "orientation": "portrait"
   }
