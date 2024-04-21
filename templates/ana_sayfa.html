@@ -41,11 +41,52 @@
         }
     </style>
 
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="sanalajanda.com">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="/pwa/img/iphone5_splash.png"
+          media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image"/>
+    <link href="/pwa/img/iphone6_splash.png"
+          media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image"/>
+    <link href="/pwa/img/iphoneplus_splash.png"
+          media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+          rel="apple-touch-startup-image"/>
+    <link href="/pwa/img/iphonex_splash.png"
+          media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+          rel="apple-touch-startup-image"/>
+    <link href="/pwa/img/ipad_splash.png"
+          media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image"/>
+    <link href="/pwa/img/ipadpro1_splash.png"
+          media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image"/>
+    <link href="/pwa/img/ipadpro2_splash.png"
+          media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+          rel="apple-touch-startup-image"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="/pwa/img/120x120.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x1208" href="/pwa/img/120x120.png">
+    <link rel="icon" sizes="192x192" href="/pwa/img/192x192.png">
+    <link rel="icon" sizes="120x120" href="/pwa/img/120x120.png">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js?v=3');
+            });
+        }
+    </script>
+
 </head>
 <body>
 {% include 'includes/navbar.html' %}
 
 <div class="home-content">
+    <div class="install-app-container">
+        Dilerseniz Uygulamamızı Yükleyebilirsiniz
+        <button id="install-app" class="btn btn-success btn-sm" style="display: none">Uygulamayı Yükle</button>
+    </div>
 
     <div class="row">
         <div class="not-ekle col-xl-4 col-lg-4 col-md-4 ">
@@ -157,19 +198,19 @@
             weekdayFormat: "short",
 
         })
-        
+
         inlineCal.on('data', function (value) {
             $('#secilen_tarih').val(value);
             $('#selected_date_input').val(value);
-            
+
             // Seçilen tarihi kaydet
             localStorage.setItem('previousDate', value);
-            
+
             // sadece günlere tıklandığında submit işlemi yap
             if (!$(event.target).hasClass('rd-back') && !$(event.target).hasClass('rd-next')) {
                 $('#tarih-form').submit();
             }
-            
+
         });
 
         // Sayfa yüklendiğinde önceki tarih değerini al
@@ -178,15 +219,15 @@
             $('#selected_date_input').val(previousDate);
 
         }
-        
+
 
     });
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             this.value = this.value.toLowerCase();
         });
     });
@@ -218,6 +259,23 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+
+<script>
+    const installButton = document.getElementById('install-app');
+    let beforeInstallPromptEvent
+    window.addEventListener("beforeinstallprompt", function(e) {
+        e.preventDefault();
+        beforeInstallPromptEvent = e
+        installButton.style.display = 'block'
+        installButton.addEventListener("click", function() {
+            e.prompt();
+        });
+        installButton.hidden = false;
+    });
+    installButton.addEventListener("click", function() {
+        beforeInstallPromptEvent.prompt();
+    });
+</script>
 
 <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
 <script src="{% static "js/popper.min.js" %}"></script>
