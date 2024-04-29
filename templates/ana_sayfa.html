@@ -67,7 +67,7 @@
           media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
           rel="apple-touch-startup-image"/>
     <link rel="apple-touch-icon" sizes="120x120" href="{% static "pwa/img/120x120.png" %}">
-    <link rel="apple-touch-icon-precomposed" sizes="120x1208" href="{% static "pwa/img/120x120.png" %}">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{% static "pwa/img/120x120.png" %}">
     <link rel="icon" sizes="192x192" href="{% static "pwa/img/192x192.png" %}">
     <link rel="icon" sizes="120x120" href="{% static "pwa/img/120x120.png" %}">
     <script>
@@ -77,6 +77,15 @@
             });
         }
     </script>
+
+    <style>
+        .phoneNumber {
+            color: blue; /* Telefon numaralarını mavi renkte göster */
+            cursor: pointer; /* Telefon numarasına tıklanabilir bir işaretçi kullan */
+        }
+
+
+    </style>
 
 </head>
 <body>
@@ -137,7 +146,7 @@
                             {% endif %}
                         </h5>
                     </div>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">
+                    <h6 class="card-subtitle mb-2 text-body-secondary" id="card-subtitle">
                         {% if tasks %}
 
                             <ul>
@@ -190,6 +199,52 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/tr.min.js"></script>
+
+
+<script>
+    // Telefon numarası bulma ve gizleme/gösterme işlevi
+    function togglePhoneNumbers() {
+        var userNotes = document.getElementById("card-subtitle");
+        var notes = userNotes.getElementsByTagName("h5");
+        for (var i = 0; i < notes.length; i++) {
+            var note = notes[i];
+            var text = note.textContent; // Not metnini al
+
+            // Telefon numarası olup olmadığını kontrol et
+            var phoneNumbers = text.match(/\b(\d{4})[-.\s]?(\d{3})[-.\s]?(\d{2})[-.\s]?(\d{2})\b/g);
+            if (phoneNumbers) {
+                // Telefon numarası bulundu, gizle veya göster
+                phoneNumbers.forEach(function (phoneNumber) {
+                    var phoneNumberIndex = text.indexOf(phoneNumber);
+                    var beforePhoneNumber = text.substring(0, phoneNumberIndex);
+                    var afterPhoneNumber = text.substring(phoneNumberIndex + phoneNumber.length);
+                    var originalPhoneNumber = phoneNumber;
+
+                    // Yeni not metnini oluştur
+                    var newNoteText = beforePhoneNumber + '<span class="phoneNumber" data-original="' + originalPhoneNumber + '" onclick="togglePhoneNumberVisibility(this)">' + '*'.repeat(8) + '</span>' + afterPhoneNumber;
+                    note.innerHTML = newNoteText;
+                });
+            }
+        }
+
+    }
+
+    // Telefon numarasının gizlenip gösterilmesi işlevi
+    function togglePhoneNumberVisibility(phoneNumberSpan) {
+        var originalPhoneNumber = phoneNumberSpan.getAttribute('data-original'); // Orijinal telefon numarasını al
+
+        // Numara zaten gizliyse göster, değilse gizle
+        phoneNumberSpan.textContent = phoneNumberSpan.textContent === '*'.repeat(8) ? originalPhoneNumber : '*'.repeat(8);
+    }
+
+</script>
+<script>
+    // Sayfa yüklendiğinde telefon numaralarını bul ve gizle/göster
+    window.onload = function () {
+        togglePhoneNumbers();
+    };
+</script>
+
 
 <script>
     $(document).ready(function () {
